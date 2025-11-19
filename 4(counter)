@@ -1,50 +1,88 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
 
-void main(){
-  runApp(const CounterApp());
+import 'package:flutter/material.dart';
+import 'dart:async';
+void main() {
+  runApp(const MyApp());
 }
-class CounterApp extends StatefulWidget{
-  const CounterApp({super.key});
-  State<CounterApp> createState()=>_CounterAppState();
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Counter Application',
+      theme: ThemeData(
+
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
 }
-class _CounterAppState extends State<CounterApp>{
-  int count=0;
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int counter = 0;
   Timer? timer;
-   void Start(){
-    timer=Timer.periodic(const Duration(seconds: 1), (_){
-      setState(() {
-        count++;
-      });
+  void incrementCounter() {
+    setState(() {
+     counter++;
     });
   }
-  void Stop(){
-     timer?.cancel();
+
+  void startCounter(){
+       timer=Timer.periodic(Duration(seconds:1),(t){
+        setState(() {
+          counter++;
+        });
+       });
   }
-  Widget build(BuildContext context){
-     return MaterialApp(
-       debugShowCheckedModeBanner: false,
-       home: Scaffold(
-         appBar: AppBar(
-           title: const Text("Counter App"),
-           centerTitle: true,
-         ),
-         body: Center(
-           child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Text(
-                 "$count",
-                 style: const TextStyle(fontSize: 40),
-               ),
-               const SizedBox(height: 20,),
-               ElevatedButton(onPressed: Start, child: const Text("Start")),
-               const SizedBox(height: 20,),
-               ElevatedButton(onPressed: Stop, child: const  Text("Stop")),
-             ],
-           ),
-         ),
-       ),
-     );
+  
+  void stopCounter(){
+    timer?.cancel();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+         title: Text(widget.title),
+      ),
+      body: Center(
+         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('Counter value'),
+            Text(
+              '$counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+
+            SizedBox(height:20),
+
+            ElevatedButton(onPressed: startCounter, child: Text("Start"),
+            ),
+
+            SizedBox(height: 12),
+            ElevatedButton(onPressed: stopCounter, child: Text("Stop"),
+            ),
+
+          ],
+        ),
+      ),
+      );
   }
 }
+
+
